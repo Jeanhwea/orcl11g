@@ -7,11 +7,11 @@ Download database installation files from [Oracle site](http://www.oracle.com/te
 Run container and it will install oracle and create database:
 
 ```sh
-docker run --privileged --name oracle11g -p 1521:1521 -v <install_folder>:/install jaspeen/oracle-11g
+docker run --privileged --name orcl11g -p 1521:1521 -v <install_folder>:/install orcl11g
 ```
 Then you can commit this container to have installed and configured oracle database:
 ```sh
-docker commit oracle11g oracle11g-installed
+docker commit orcl11g orcl11g-installed
 ```
 
 Database located in **/u01/app** folder
@@ -25,9 +25,9 @@ DB users:
 
 Optionally you can map dpdump folder to easy upload dumps:
 ```sh
-docker run --privileged --name oracle11g -p 1521:1521 -v <install_folder>:/install -v <local_dpdump>:/u01/app/dpdump oracle-11g
+docker run --privileged --name orcl11g -p 1521:1521 -v <install_folder>:/install -v <local_dpdump>:/u01/app/dpdump orcl11g
 ```
 To execute impdp/expdp just use docker exec command:
 ```sh
-docker exec -it oracle11g impdp ..
+docker exec -it orcl11g impdp ..
 ```
