@@ -35,10 +35,20 @@ DB users:
 
 Optionally you can map dpdump folder to easy upload dumps:
 ```sh
-docker run --privileged \
+docker run --privileged --detach \
        --hostname orcl11g.$(hostname) \
        -v ~/Public/srv/orcl11g/install:/install \
        -v ~/Public/srv/orcl11g/dpdump:/u01/app/dpdump \
+       -p 1521:1521 \
+       --name orcl11g \
+       orcl11g
+```
+
+```sh
+docker run --privileged --detach \
+       --hostname orcl11g.$(hostname) \
+       -v /srv/orcl11g/install:/install \
+       -v /srv/orcl11g/dpdump:/u01/app/dpdump \
        -p 1521:1521 \
        --name orcl11g \
        orcl11g
