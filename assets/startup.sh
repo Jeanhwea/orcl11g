@@ -22,7 +22,7 @@ trap_db() {
 start_db() {
   echo_yellow "Starting listener..."
   monitor $listener_log listener &
-  lsnrctl start | while read line; do echo -e "lsnrctl: $line"; done
+  lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   MON_LSNR_PID=$!
   echo_yellow "Starting database..."
   trap_db
@@ -34,7 +34,7 @@ start_db() {
     alter system register;
     exit 0
 EOF
-  while read line; do echo -e "sqlplus: $line"; done
+  while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
   wait $MON_ALERT_PID
 }
 
@@ -44,7 +44,7 @@ create_db() {
   monitor $alert_log alertlog &
   MON_ALERT_PID=$!
   monitor $listener_log listener &
-  #lsnrctl start | while read line; do echo -e "lsnrctl: $line"; done
+  #lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   #MON_LSNR_PID=$!
   echo "START DBCA"
   dbca -silent -createDatabase -responseFile /assets/dbca.rsp
@@ -61,7 +61,7 @@ stop() {
   trap '' SIGINT SIGTERM
   shu_immediate
   echo_yellow "Shutting down listener..."
-  lsnrctl stop | while read line; do echo -e "lsnrctl: $line"; done
+  lsnrctl stop | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   kill $MON_ALERT_PID $MON_LSNR_PID
   exit 0
 }
@@ -74,7 +74,7 @@ shu_immediate() {
     shutdown immediate;
     exit 0
 EOF
-  while read line; do echo -e "sqlplus: $line"; done
+  while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
 }
 
 change_dpdump_dir () {
@@ -84,7 +84,7 @@ change_dpdump_dir () {
     commit;
     exit 0
 EOF
-  while read line; do echo -e "sqlplus: $line"; done
+  while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
 }
 
 echo "Checking shared memory..."
