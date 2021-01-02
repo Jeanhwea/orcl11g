@@ -38,7 +38,7 @@ SID: *ora11g*
 
 Optionally you can map dpdump folder to easy upload dumps:
 ```sh
-docker run --privileged --detach \
+docker run --privileged --detach --restart always \
        --hostname orcl11g.$(hostname) \
        -v ~/Public/srv/orcl11g/install:/install \
        -v ~/Public/srv/orcl11g/dpdump:/u01/app/dpdump \
@@ -48,7 +48,7 @@ docker run --privileged --detach \
 ```
 
 ```sh
-docker run --privileged --detach \
+docker run --privileged --detach --restart always \
        --hostname orcl11g.$(hostname) \
        -v /srv/orcl11g/install:/install \
        -v /srv/orcl11g/dpdump:/u01/app/dpdump \
@@ -60,4 +60,10 @@ docker run --privileged --detach \
 To execute impdp/expdp just use docker exec command:
 ```sh
 docker exec -it orcl11g impdp ..
+```
+
+Manage database
+```sh
+docker exec -it orcl11g /bin/bash
+su - oracle
 ```
