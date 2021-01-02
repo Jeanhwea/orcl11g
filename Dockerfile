@@ -1,5 +1,5 @@
-FROM centos:7
-MAINTAINER jaspeen
+FROM centos:7.7.1908
+LABEL author="Jinghui Hu"
 
 ADD assets /assets
 
@@ -9,4 +9,4 @@ RUN /assets/setup.sh
 EXPOSE 1521
 EXPOSE 8080
 
-CMD ["/assets/entrypoint.sh"]
+ENTRYPOINT /assets/entrypoint.sh
