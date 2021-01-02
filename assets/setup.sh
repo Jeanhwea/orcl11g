@@ -39,3 +39,4 @@ cat /assets/profile >> ~oracle/.bashrc
 echo "Configuring system limits"
 cp /assets/sysctl.conf /etc/sysctl.conf
 cat /assets/limits.conf >> /etc/security/limits.conf
+echo 'tmpfs /dev/shm tmpfs defaults,size=4G 0 0' >> /etc/fstab
