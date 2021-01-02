@@ -33,6 +33,9 @@ OS users:
 DB users:
 * SYS/oracle
 
+SID: *ora11g*
+
+
 Optionally you can map dpdump folder to easy upload dumps:
 ```sh
 docker run --privileged --detach \
