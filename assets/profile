@@ -21,3 +21,5 @@ alias d0='dbshut $ORACLE_HOME'
 alias d1='dbstart $ORACLE_HOME'
 alias l0='lsnrctl stop'
 alias l1='lsnrctl start'
+
+[ -f /etc/bashrc ] && source /etc/bashrc
