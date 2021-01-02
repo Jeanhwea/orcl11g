@@ -8,4 +8,6 @@ if [ ! -d "/u01/app/oracle/product/11.2.0/dbhome_1" ]; then
   /assets/install.sh
 fi
 
+mount -o remount,size=4G /dev/shm
+
 su oracle -c "/assets/startup.sh"
