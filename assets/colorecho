@@ -6,14 +6,13 @@ ccgreen='\033[32m'
 ccend='\033[0m'
 
 echo_red() {
-    echo -e "${ccred}$@${ccend}"
+  echo -e "${ccred}$@${ccend}"
 }
 
 echo_yellow() {
-    echo -e "${ccyellow}$@${ccend}"
+  echo -e "${ccyellow}$@${ccend}"
 }
 
 echo_green() {
-    echo -e "${ccgreen}$@${ccend}"
+  echo -e "${ccgreen}$@${ccend}"
 }
-
