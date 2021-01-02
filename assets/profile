@@ -9,3 +9,13 @@ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
 export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
 export NLS_DATE_FORMAT="YYYY-MM-DD HH24:MI:SS"
 export ORACLE_HOME_LISTNER=$ORACLE_HOME
+
+alias cdob='cd $ORACLE_BASE'
+alias cdoh='cd $ORACLE_HOME'
+alias cdtns='cd $TNS_ADMIN'
+alias cdod='cd $ORACLE_BASE/oradata'
+alias envo='env | grep ORACLE'
+alias d0='dbshut $ORACLE_HOME'
+alias d1='dbstart $ORACLE_HOME'
+alias l0='lsnrctl stop'
+alias l1='lsnrctl start'
