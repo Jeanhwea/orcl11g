@@ -33,6 +33,7 @@ echo "root:install" | chpasswd
 sed -i "s/pam_namespace.so/pam_namespace.so\nsession    required     pam_limits.so/g" /etc/pam.d/login
 chown -R oracle:oinstall /u01/app
 
+echo '[ -f ~/.bashrc ] && source ~/.bashrc' >> /etc/profile
 cat /assets/profile >> ~oracle/.bash_profile
 cat /assets/profile >> ~oracle/.bashrc
 
