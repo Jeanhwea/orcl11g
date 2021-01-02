@@ -33,7 +33,7 @@ start_db() {
     startup;
     alter system register;
     exit 0
-  EOF
+EOF
   while read line; do echo -e "sqlplus: $line"; done
   wait $MON_ALERT_PID
 }
@@ -73,7 +73,7 @@ shu_immediate() {
     set echo on
     shutdown immediate;
     exit 0
-  EOF
+EOF
   while read line; do echo -e "sqlplus: $line"; done
 }
 
@@ -83,7 +83,7 @@ change_dpdump_dir () {
     create or replace directory data_pump_dir as '/u01/app/dpdump';
     commit;
     exit 0
-  EOF
+EOF
   while read line; do echo -e "sqlplus: $line"; done
 }
 
