@@ -1,3 +1,5 @@
+export TZ=Asia/Shanghai
+
 export ORACLE_BASE=/u01/app/oracle
 export ORACLE_SID=ora11g
 export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1

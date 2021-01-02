@@ -10,7 +10,7 @@ pfile=$ORACLE_HOME/dbs/init$ORACLE_SID.ora
 
 # monitor $logfile
 monitor() {
-  tail -F -n 0 $1 | while read line; do echo -e "$2: $line"; done
+  tail -F -n 0 $1 | while read line; do echo -e "$(date '+%F %T') $2: $line"; done
 }
 
 
