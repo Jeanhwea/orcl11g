@@ -1,7 +1,7 @@
+TIMEZONE=${TIMEZONE:='Asia/Shanghai'}
 USE_TUNA_UPSTREAM=${USE_TUNA_UPSTREAM:='n'}
 
 set -e
-
 trap "echo '******* ERROR: Something went wrong.'; exit 1" SIGTERM
 trap "echo '******* Caught SIGINT signal. Stopping...'; exit 2" SIGINT
 
@@ -37,7 +37,7 @@ mkdir -p -m 755 /u01/app/oraInventory
 mkdir -p -m 755 /u01/app/dpdump
 chown -R oracle:oinstall /u01/app
 
-echo '[ -f ~/.bashrc ] && source ~/.bashrc' >> /etc/profile
+echo "export TZ=$TIMEZONE" >> /etc/profile
 cat /assets/profile >> ~oracle/.bash_profile
 cat /assets/profile >> ~oracle/.bashrc
 
