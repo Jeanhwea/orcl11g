@@ -37,7 +37,7 @@ mkdir -p -m 755 /u01/app/oraInventory
 mkdir -p -m 755 /u01/app/dpdump
 chown -R oracle:oinstall /u01/app
 
-echo "export TZ=$TIMEZONE" >> /etc/profile
+echo "export TZ=$TIMEZONE" >> /etc/bashrc
 cat /assets/profile >> ~oracle/.bash_profile
 cat /assets/profile >> ~oracle/.bashrc
 
