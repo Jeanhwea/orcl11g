@@ -93,7 +93,7 @@ EOF
 
 
 echo "Checking shared memory..."
-df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo_red "Shared memory is not mounted."
+df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo "Shared memory is not mounted."
 if [ ! -f $PFILE_ORA ]; then
   dbcreate;
 fi
