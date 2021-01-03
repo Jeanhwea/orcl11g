@@ -37,7 +37,7 @@ SID: *ora11g*
 
 Build this image example:
 ```sh
-docker build --build-arg USE_TUNA_MIRROR=y -t orcl11g .
+docker build --build-arg USE_TUNA_UPSTREAM=y -t orcl11g .
 ```
 
 Optionally you can map dpdump folder to easy upload dumps:
