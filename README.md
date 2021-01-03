@@ -4,7 +4,7 @@ run from external directory.
 
 ``This image for development use only``
 
-# Usage
+## Usage
 Extract database installation files to **install_folder**.  Run container and it
 will install oracle and create database:
 
@@ -26,6 +26,7 @@ docker commit orcl11g orcl11g-installed
 
 Database located in **/u01/app** folder
 
+## Constants
 OS users:
 * root/install
 * oracle/install
@@ -33,14 +34,16 @@ OS users:
 DB users:
 * SYS/oracle
 
-SID: *ora11g*
+oracle envs:
+* SID: **ora11g**
 
+## Cheatsheets
 Build this image example:
 ```sh
 docker build --build-arg USE_TUNA_UPSTREAM=y -t orcl11g .
 ```
 
-Optionally you can map dpdump folder to easy upload dumps:
+Quick start commands
 ```sh
 docker run --privileged --detach --restart always \
        --hostname orcl11g.$(hostname) \
