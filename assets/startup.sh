@@ -5,7 +5,7 @@ source /assets/colorecho
 source ~/.bashrc
 
 ALERT_LOG="$ORACLE_BASE/diag/rdbms/ora11g/$ORACLE_SID/trace/alert_$ORACLE_SID.log"
-LSNER_LOG="$ORACLE_BASE/diag/tnslsnr/$ORACLE_SID/listener/trace/listener.log"
+LSNER_LOG="$ORACLE_BASE/diag/tnslsnr/${HOSTNAME//.*/}/listener/trace/listener.log"
 PFILE_ORA=$ORACLE_HOME/dbs/init$ORACLE_SID.ora
 
 
