@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-
 set -e
-source /assets/colorecho
+
 source ~/.bashrc
 
 ALERT_LOG="$ORACLE_BASE/diag/rdbms/ora11g/$ORACLE_SID/trace/alert_$ORACLE_SID.log"
@@ -16,17 +15,17 @@ monitor() {
 
 
 dbtrap() {
-  trap "echo_red 'Caught SIGTERM signal, shutting down...'; stop" SIGTERM;
-  trap "echo_red 'Caught SIGINT signal, shutting down...'; stop" SIGINT;
+  trap "echo 'Caught SIGTERM signal, shutting down...'; stop" SIGTERM;
+  trap "echo 'Caught SIGINT signal, shutting down...'; stop" SIGINT;
 }
 
 
 dbstart() {
-  echo_yellow "Starting listener..."
+  echo "Starting listener..."
   monitor $LSNER_LOG listener &
   lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   MON_LSNR_PID=$!
-  echo_yellow "Starting database..."
+  echo "Starting database..."
   dbtrap
   monitor $ALERT_LOG alertlog &
   MON_ALERT_PID=$!
@@ -42,7 +41,7 @@ EOF
 
 
 dbcreate() {
-  echo_yellow "Database does not exist. Creating database..."
+  echo "Database does not exist. Creating database..."
   date "+%F %T"
   monitor $ALERT_LOG alertlog &
   MON_ALERT_PID=$!
@@ -51,7 +50,7 @@ dbcreate() {
   # MON_LSNR_PID=$!
   echo "START DBCA"
   dbca -silent -createDatabase -responseFile /assets/dbca.rsp
-  echo_green "Database created."
+  echo "Database created."
   change_dpdump_dir
   touch $PFILE_ORA
   dbtrap
@@ -62,7 +61,7 @@ dbcreate() {
 
 dbshut() {
   ps -ef | grep ora_pmon | grep -v grep > /dev/null && \
-  echo_yellow "Shutting down the database..." && \
+  echo "Shutting down the database..." && \
   sqlplus / as sysdba <<-EOF |
     SET ECHO ON
     SHUTDOWN IMMEDIATE;
@@ -75,7 +74,7 @@ EOF
 dbclose() {
   trap '' SIGINT SIGTERM
   dbshut
-  echo_yellow "Shutting down listener..."
+  echo "Shutting down listener..."
   lsnrctl stop | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   kill $MON_ALERT_PID $MON_LSNR_PID
   exit 0
@@ -83,7 +82,7 @@ dbclose() {
 
 
 change_dpdump_dir () {
-  echo_green "Changind dpdump dir to /u01/app/dpdump"
+  echo "Changing dpdump dir to /u01/app/dpdump"
   sqlplus / as sysdba <<-EOF |
     CREATE OR REPLACE DIRECTORY DATA_PUMP_DIR AS '/u01/app/dpdump';
     COMMIT;
@@ -93,7 +92,7 @@ EOF
 }
 
 
-echo_yellow "Checking shared memory..."
+echo "Checking shared memory..."
 df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo_red "Shared memory is not mounted."
 if [ ! -f $PFILE_ORA ]; then
   dbcreate;
