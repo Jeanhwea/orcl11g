@@ -4,9 +4,10 @@ set -e
 source /assets/colorecho
 source ~/.bashrc
 
-alert_log="$ORACLE_BASE/diag/rdbms/ora11g/$ORACLE_SID/trace/alert_$ORACLE_SID.log"
-listener_log="$ORACLE_BASE/diag/tnslsnr/$HOSTNAME/listener/trace/listener.log"
-pfile=$ORACLE_HOME/dbs/init$ORACLE_SID.ora
+ALERT_LOG="$ORACLE_BASE/diag/rdbms/ora11g/$ORACLE_SID/trace/alert_$ORACLE_SID.log"
+LSNER_LOG="$ORACLE_BASE/diag/tnslsnr/$HOSTNAME/listener/trace/listener.log"
+PFILE_ORA=$ORACLE_HOME/dbs/init$ORACLE_SID.ora
+
 
 # monitor $logfile
 monitor() {
@@ -14,82 +15,87 @@ monitor() {
 }
 
 
-trap_db() {
+dbtrap() {
   trap "echo_red 'Caught SIGTERM signal, shutting down...'; stop" SIGTERM;
   trap "echo_red 'Caught SIGINT signal, shutting down...'; stop" SIGINT;
 }
 
-start_db() {
+
+dbstart() {
   echo_yellow "Starting listener..."
-  monitor $listener_log listener &
+  monitor $LSNER_LOG listener &
   lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   MON_LSNR_PID=$!
   echo_yellow "Starting database..."
-  trap_db
-  monitor $alert_log alertlog &
+  dbtrap
+  monitor $ALERT_LOG alertlog &
   MON_ALERT_PID=$!
   sqlplus / as sysdba <<-EOF |
-    pro Starting with pfile='$pfile' ...
-    startup;
-    alter system register;
-    exit 0
+    PROMPT Starting with pfile='$PFILE_ORA' ...
+    STARTUP;
+    ALTER SYSTEM REGISTER;
+    EXIT 0
 EOF
   while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
   wait $MON_ALERT_PID
 }
 
-create_db() {
+
+dbcreate() {
   echo_yellow "Database does not exist. Creating database..."
   date "+%F %T"
-  monitor $alert_log alertlog &
+  monitor $ALERT_LOG alertlog &
   MON_ALERT_PID=$!
-  monitor $listener_log listener &
-  #lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
-  #MON_LSNR_PID=$!
+  monitor $LSNER_LOG listener &
+  # lsnrctl start | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
+  # MON_LSNR_PID=$!
   echo "START DBCA"
   dbca -silent -createDatabase -responseFile /assets/dbca.rsp
   echo_green "Database created."
-  date "+%F %T"
   change_dpdump_dir
-  touch $pfile
-  trap_db
+  touch $PFILE_ORA
+  dbtrap
   kill $MON_ALERT_PID
-  #wait $MON_ALERT_PID
+  # wait $MON_ALERT_PID
 }
 
-stop() {
+
+dbshut() {
+  ps -ef | grep ora_pmon | grep -v grep > /dev/null && \
+  echo_yellow "Shutting down the database..." && \
+  sqlplus / as sysdba <<-EOF |
+    SET ECHO ON
+    SHUTDOWN IMMEDIATE;
+    EXIT 0
+EOF
+  while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
+}
+
+
+dbclose() {
   trap '' SIGINT SIGTERM
-  shu_immediate
+  dbshut
   echo_yellow "Shutting down listener..."
   lsnrctl stop | while read line; do echo -e "$(date '+%F %T') lsnrctl: $line"; done
   kill $MON_ALERT_PID $MON_LSNR_PID
   exit 0
 }
 
-shu_immediate() {
-  ps -ef | grep ora_pmon | grep -v grep > /dev/null && \
-  echo_yellow "Shutting down the database..." && \
-  sqlplus / as sysdba <<-EOF |
-    set echo on
-    shutdown immediate;
-    exit 0
-EOF
-  while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
-}
 
 change_dpdump_dir () {
   echo_green "Changind dpdump dir to /u01/app/dpdump"
   sqlplus / as sysdba <<-EOF |
-    create or replace directory data_pump_dir as '/u01/app/dpdump';
-    commit;
-    exit 0
+    CREATE OR REPLACE DIRECTORY DATA_PUMP_DIR AS '/u01/app/dpdump';
+    COMMIT;
+    EXIT 0
 EOF
   while read line; do echo -e "$(date '+%F %T') sqlplus: $line"; done
 }
 
-echo "Checking shared memory..."
-df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo "Shared memory is not mounted."
-if [ ! -f $pfile ]; then
-  create_db;
+
+echo_yellow "Checking shared memory..."
+df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo_red "Shared memory is not mounted."
+if [ ! -f $PFILE_ORA ]; then
+  dbcreate;
 fi
-start_db
+dbstart

@@ -13,5 +13,7 @@ fi
 echo_yellow "Installing Oracle Database 11g"
 
 su oracle -c "/install/database/runInstaller -silent -ignorePrereq -waitforcompletion -responseFile /assets/db_install.rsp"
+
+echo_yellow "Executing root scripts"
 /u01/app/oraInventory/orainstRoot.sh
 /u01/app/oracle/product/11.2.0/dbhome_1/root.sh
