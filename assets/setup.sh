@@ -21,12 +21,8 @@ yum -y install binutils compat-libstdc++-33 compat-libstdc++-33.i686 ksh \
 yum clean all
 rm -rf /var/lib/{cache,log} /var/log/lastlog
 
-echo "Creating directories"
-mkdir -p -m 755 /u01/app/oracle
-mkdir -p -m 755 /u01/app/oraInventory
-mkdir -p -m 755 /u01/app/dpdump
-
 echo "Configuring users"
+mkdir -p /u01/app
 groupadd -g 200 oinstall
 groupadd -g 201 dba
 groupadd -g 202 oper
@@ -34,6 +30,11 @@ useradd -u 440 -g oinstall -G dba,oper -d /u01/app/oracle oracle
 echo "oracle:install" | chpasswd
 echo "root:install" | chpasswd
 sed -i "s/pam_namespace.so/pam_namespace.so\nsession    required     pam_limits.so/g" /etc/pam.d/login
+
+echo "Creating directories"
+mkdir -p -m 755 /u01/app/oracle
+mkdir -p -m 755 /u01/app/oraInventory
+mkdir -p -m 755 /u01/app/dpdump
 chown -R oracle:oinstall /u01/app
 
 echo '[ -f ~/.bashrc ] && source ~/.bashrc' >> /etc/profile
