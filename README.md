@@ -8,7 +8,7 @@ run from external directory.
 Extract database installation files to **install_folder**.  Run container and it
 will install oracle and create database:
 
-```sh
+```shell
 docker run --privileged \
        --hostname orcl11g.$(hostname) \
        -v <install_folder>:/install \
@@ -20,7 +20,7 @@ docker run --privileged \
 
 Then you can commit this container to have installed and configured oracle database:
 
-```sh
+```shell
 docker commit orcl11g orcl11g-installed
 ```
 
@@ -39,12 +39,12 @@ oracle envs:
 
 ## Cheatsheets
 Build this image example:
-```sh
+```shell
 docker build --build-arg USE_TUNA_UPSTREAM=y -t orcl11g .
 ```
 
 Quick start commands
-```sh
+```shell
 docker run --privileged --detach --restart always \
        --hostname orcl11g.$(hostname) \
        -v ~/Public/srv/orcl11g/install:/install \
@@ -54,7 +54,7 @@ docker run --privileged --detach --restart always \
        orcl11g
 ```
 
-```sh
+```shell
 docker run --privileged --detach --restart always \
        --hostname orcl11g.$(hostname) \
        -v /srv/orcl11g/install:/install \
@@ -65,12 +65,12 @@ docker run --privileged --detach --restart always \
 ```
 
 To execute impdp/expdp just use docker exec command:
-```sh
+```shell
 docker exec -it orcl11g impdp ..
 ```
 
 Manage database
-```sh
+```shell
 docker exec -it orcl11g /bin/bash
 su - oracle
 ```
