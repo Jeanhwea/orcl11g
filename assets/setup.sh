@@ -5,7 +5,13 @@ trap "echo '******* Caught SIGINT signal. Stopping...'; exit 2" SIGINT
 
 #Install prerequisites directly without virtual package
 echo "Installing dependencies"
-rm /etc/yum.repos.d/*.repo && cp /assets/CentOS-Base.repo /etc/yum.repos.d
+USE_TUNA_MIRROR=${USE_TUNA_MIRROR:'n'}
+if [ "$USE_TUNA_MIRROR" != "n" ]; then
+  rm /etc/yum.repos.d/*.repo && cp /assets/CentOS-Base.repo /etc/yum.repos.d
+  echo "Using TUNA tsinghua upstream"
+else
+  echo "Using default upstream"
+fi
 yum makecache
 
 yum -y install binutils compat-libstdc++-33 compat-libstdc++-33.i686 ksh \
