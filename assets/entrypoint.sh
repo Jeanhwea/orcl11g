@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+SHM_SIZE=${SHM_SIZE:=4g}
+
 set -e
 
-SHM_SIZE=${SHM_SIZE:=4g}
 echo "tmpfs /dev/shm tmpfs defaults,size=$SHM_SIZE 0 0" >> /etc/fstab
 mount -o remount,size=$SHM_SIZE /dev/shm
 

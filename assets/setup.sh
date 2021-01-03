@@ -1,3 +1,5 @@
+USE_TUNA_MIRROR=${USE_TUNA_MIRROR:'n'}
+
 set -e
 
 trap "echo '******* ERROR: Something went wrong.'; exit 1" SIGTERM
@@ -5,10 +7,9 @@ trap "echo '******* Caught SIGINT signal. Stopping...'; exit 2" SIGINT
 
 #Install prerequisites directly without virtual package
 echo "Installing dependencies"
-USE_TUNA_MIRROR=${USE_TUNA_MIRROR:'n'}
-if [ "$USE_TUNA_MIRROR" != "n" ]; then
+if [ "$USE_TUNA_MIRROR" == "n" ]; then
   rm /etc/yum.repos.d/*.repo && cp /assets/CentOS-Base.repo /etc/yum.repos.d
-  echo "Using TUNA tsinghua upstream"
+  echo "Using TUNA as upstream"
 else
   echo "Using default upstream"
 fi
